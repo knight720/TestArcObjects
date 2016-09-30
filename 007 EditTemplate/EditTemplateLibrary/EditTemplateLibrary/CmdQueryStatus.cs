@@ -8,6 +8,7 @@ using ESRI.ArcGIS.ArcMapUI;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Editor;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace EditTemplateLibrary
 {
@@ -122,7 +123,8 @@ namespace EditTemplateLibrary
         /// </summary>
         public override void OnClick()
         {
-            CmdQueryStatus.SwitchOption(m_application,true);
+            //CmdQueryStatus.SwitchOption(m_application,true);
+            CmdQueryStatus.GetEditTempelate(m_application);
         }
 
         #endregion
@@ -144,6 +146,15 @@ namespace EditTemplateLibrary
 
             //ep.ClassicSnapping = !ep.ClassicSnapping;
             ep.ClassicSnapping = isChecked;
+        }
+
+        public static void GetEditTempelate(IApplication application)
+        {
+            UID uid = new UID();
+            uid.Value = "esriEditor.Editor";
+            IEditor3 editor = application.FindExtensionByCLSID(uid) as IEditor3;
+
+            Debug.WriteLine(editor.CurrentTemplate.Tool);
         }
     }
 }

@@ -126,8 +126,33 @@ namespace EditTemplateLibrary
             // TODO: Add CmdEditTemplate.OnClick implementation
             IMxDocument mxDocuemnt = (IMxDocument)m_application.Document;
             IMap map = mxDocuemnt.FocusMap;
-            ILayer layer = map.get_Layer(0);
-            IDataset dataset = (IDataset)layer;
+
+            //ILayer layer = map.get_Layer(0);
+            //{6CA416B1-E160-11D2-9F4E-00C04F6BC78E} IDataLayer
+            //{40A9E885-5533-11d0-98BE-00805F7CED21} IFeatureLayer
+            //{E156D7E5-22AF-11D3-9F99-00C04F6BC78E} IGeoFeatureLayer
+            //{34B2EF81-F4AC-11D1-A245-080009B6F22B} IGraphicsLayer
+            //{5CEAE408-4C0A-437F-9DB3-054D83919850} IFDOGraphicsLayer
+            //{0C22A4C7-DAFD-11D2-9F46-00C04F6BC78E} ICoverageAnnotationLayer
+            //{EDAD6644-1810-11D1-86AE-0000F8751720} IGroupLayer
+            ILayer layer = null;
+            IDataset dataset = null;
+            UID uid2 = new UID();
+            uid2.Value = "{40A9E885-5533-11d0-98BE-00805F7CED21}";
+            IEnumLayer el = map.get_Layers(uid2, true);
+            ILayer l = el.Next();
+            while (l != null)
+            {
+                dataset = (IDataset)l;
+                if (dataset.BrowseName.Equals("LandUse"))
+                {
+                    layer = l;
+                    break;
+                }
+                l = el.Next();
+            }
+
+            dataset = (IDataset)layer;
             //IFeatureLayer fl = (IFeatureLayer)layer;
             //IFeatureClass fc = fl.FeatureClass;
             IWorkspace workspace = dataset.Workspace;
@@ -151,7 +176,7 @@ namespace EditTemplateLibrary
             }
 
 
-            editor.RemoveAllTemplatesInLayer(layer);
+            //editor.RemoveAllTemplatesInLayer(layer);
             IArray array = new ArrayClass();
 
             ILayerExtensions layerExtensions;
